@@ -4,15 +4,13 @@ import fnmatch
 import re
 import git
 import yaml
-import sys
-import fnmatch
-
 
 ########################################################################
 class EnvVersions(object):
     """
     Look in specified environment variables to find out which software version was used
     If it has a git repository then record the commit id.
+    If not then the directory that it is in
     """
 
     #----------------------------------------------------------------------
@@ -22,40 +20,37 @@ class EnvVersions(object):
         self.environ = os.environ
         for key, envname in to_track_dict.iteritems():
             envval =self._get_env(envname)
+            #remove anything in path after install otherwise git repo not found
             if envval:
                 envval =envval.split("/install")[0]
                 self._analyze(key, envval)
 
-        
     def _analyze(self, key, envval):
+        ''' Find the software version '''
+        #set info to be the env path name
         info = envval
+        #see if there is a git repository here and if so pick up the commit id
         if self._is_git_repo(envval):        
             repo = git.Repo(envval)
             if not repo.bare:
                 info = dict()
                 info['commitid'] = repo.head.commit.hexsha  
         self.tracked[key] = info
-        print
-    
+
     def _is_git_repo(self, path):
+        '''test to see if this is a git repo'''
         try:
             _ = git.Repo(path).git_dir
             return True
         except git.exc.InvalidGitRepositoryError:
-            return False    
-        
-    def _get_envs(self, name):
-        paths= os.environ[name].split(':')
-        set = {}
-        map(set.__setitem__, paths, [])
-        return set.keys()  
-        
+            return False
+
     def _get_env(self, name):
+        ''' check if name is found in the env variables and return'''
         if name in self.environ:
             return self.environ[name]
         return None
-       
-    
+
     #----------------------------------------------------------------------
     def write_yaml(self, path):
         '''write the versions to a yaml file'''
