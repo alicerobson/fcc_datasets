@@ -5,7 +5,7 @@ from fcc_datasets.env_versions import EnvVersions
 ########################################################################
 class TestEnvVersion(unittest.TestCase):
     """
-        Checks that software versions can be written to yaml 
+        Checks that software versions extracted from env variables can be written to yaml
         """
 
     #----------------------------------------------------------------------
@@ -24,7 +24,7 @@ class TestEnvVersion(unittest.TestCase):
         print self.env_versions
 
     #----------------------------------------------------------------------
-    def test_1_yaml(self):
+    def test_1_env_yaml(self):
         """"""
         fname = 'software.yaml'
         self.env_versions.write_yaml(fname)

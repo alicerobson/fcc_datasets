@@ -10,7 +10,8 @@ class EnvVersions(object):
     """
     Look in specified environment variables to find out which software version was used
     If it has a git repository then record the commit id.
-    If not then the directory that it is in
+    If not  then the directory that it is in
+    Directories on the stack effectively record the version
     """
 
     #----------------------------------------------------------------------
