@@ -1,0 +1,10 @@
+ #NB the execute script will add in the JobFlavour and queue estimated from the number of events
+ executable              = papasrun.sh 
+ output                  = output/papas.$(ClusterId).$(runnumber).txt
+ error                   = error/papas.$(ClusterId).$(runnumber).txt
+ log                     = log/papas.$(ClusterId).$(runnumber).txt
+ transfer_input_files    = parameters.sh
+ getenv					 = True
+ arguments = $(ClusterId) $(runnumber)
+ transfer_output_files = ""
+ +AccountingGroup = "group_u_FCC.local_gen"
