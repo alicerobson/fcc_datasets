@@ -20,7 +20,6 @@ class File(object):
 
     def __init__(self, path, dataset_path):
         self.path = path
-        self.dataset_path = dataset_path
         self.name = os.path.basename(path)
         self.rel_path = path.replace(dataset_path, "").strip('/')
         self._check()
@@ -46,7 +45,6 @@ class File(object):
 
     def _check_zero_size(self):
         statinfo = os.stat(self.path)
-        print statinfo
         return statinfo.st_size==0
 
     def _check_n_events(self):
