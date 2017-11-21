@@ -24,7 +24,7 @@
 
 """
 To run Pythia together with Delphes for fcc_datasets example delphes run
-> ./run gaudirun.py $FCCDATASETS/htcondor/examples/delphes/PythiaDelphes_config.py
+> ./run gaudirun.py $FCCDATASETS/htcondor/examples/delphes/PythiaDelphes_CMS.py
 """
 import sys
 import os
@@ -74,18 +74,20 @@ if "FCCDATASETS" in environ:
 else:
     print "FCCDATASETS environment variable is missing - call init.sh"
 scriptdir = scriptdir  + "/htcondor/examples/delphes/"
-pythiaConfFile= scriptdir + "/Pythia_ttbar.cmd"
+pythiaConfFile= scriptdir + "/ee_ZH.txt"
 if args.inputfile != '':
     pythiaConfFile = args.inputfile
+print "Pythia =" + pythiaConfFile
 
 ## or pythia configuration file to read in LHE file & generate events
 #pythiaConfFile="Generation/data/Pythia_LHEinput.cmd"
 
 ## Define Delphes card
-
-delphesCard= scriptdir + "/FCChh_DelphesCard_Baseline_v01.tcl"
+carddir = environ["DELPHES_DIR"]
+delphesCard= carddir + "/delphes_card_CMS.tcl"
 if delphes_args.delphescard != None:
     delphesCard = delphes_args.delphescard
+print "Card =" + delphesCard
 
 
 ## Define Delphes input HepMC and optionaly (non-standard) ROOT output

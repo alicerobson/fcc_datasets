@@ -48,6 +48,7 @@ if __name__ == '__main__':
     
     #move the output files to the output directory
 #xrdcp
+    os.system("ls -al")
     move_command = 'cp *.root {}/{}/output_{}.root'.format( condor_pars["base_outputdir"], condor_pars["subdirectory"], job)
     print "move files:- ", move_command
     os.system(move_command)
