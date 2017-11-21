@@ -20,6 +20,7 @@ class File(object):
 
     def __init__(self, path, dataset_path):
         self.path = path
+        self.dataset_path = dataset_path
         self.name = os.path.basename(path)
         self.rel_path = path.replace(dataset_path, "").strip('/')
         self._check()
@@ -39,18 +40,24 @@ class File(object):
         for testname in to_check:
             method = getattr(self, '_check_{}'.format(testname))
             self.flags[testname] = method()
-        self.flags['good'] = not self.flags['zero_size']
+        self.flags['good'] = self.flags['n_events'] > 0 and not self.flags['zero_size']
+        if not self.flags['good'] and not self.flags['zero_size']:
+            print "corrupted root file found: " + self.name
 
     def _check_zero_size(self):
         statinfo = os.stat(self.path)
+        print statinfo
         return statinfo.st_size==0
 
     def _check_n_events(self):
         if self.flags['zero_size']:
             return None
         rootfile = TFile(self.path)
-        tree = rootfile.Get("events")
-        return int(tree.GetEntries())
+        try:
+            tree = rootfile.Get("events")
+            return int(tree.GetEntries())
+        except:
+            return 0
         
     def __str__(self):
         return '{:<30} : {}'.format(self.rel_path, pprint.pformat(self.flags))
@@ -185,7 +192,8 @@ class Dataset(Directory):
             if yfile == self._info_fname:
                 continue
             data = self._read_yaml(yfile)
-            self._data.update(data)
+            if data:
+                self._data.update(data)
         
 
     #----------------------------------------------------------------------

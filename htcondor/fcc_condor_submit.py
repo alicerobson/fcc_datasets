@@ -124,7 +124,7 @@ def setup_condor_dag_files(subdir, events, runs, rate = 100000):
 
 if __name__ == '__main__':
     '''
-    Usage: fcc_condor_start.py -b base_outputdir -i inputfile -s script -e events -r runs
+    Usage: fcc_condor_start.py -p parameters_yaml_file -e events -r runs
     '''
     #read in the command line options
     parser = setup_condor_parser()
