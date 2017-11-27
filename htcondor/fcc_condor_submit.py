@@ -131,6 +131,7 @@ if __name__ == '__main__':
     if len(args) != 0:
         parser.print_usage()
         sys.exit(1)
+    os.system('export EOS_MGM_URL="root://eospublic.cern.ch"')
 
     #extract options and create condor_parameters class to hold the run parameters
     #this will also construct a unique subdirectory name
@@ -144,13 +145,18 @@ if __name__ == '__main__':
     condor_parameters.write_yaml(condor_parameters["subdirectory"])    
     #write software and paramater yaml files to the output location 
     outputsub= condor_parameters["base_outputdir"] + "/" + condor_parameters["subdirectory"]    
-    write_condor_software_yaml(outputsub )
-    condor_parameters.write_yaml(outputsub)
-    print "wrote yaml files to: " + outputsub
-    os.system( "ls -l " + outputsub  )
+    write_condor_software_yaml(condor_parameters["subdirectory"] )
+
+    #condor_parameters.write_yaml(outputsub)
+
+    #os.system( "ls -l " + outputsub  )
     
     # move to the working directory and launch the dag job
     os.chdir(condor_parameters["subdirectory"])
+    move_command = 'xrdcp *.yaml {}/{}/'.format(condor_parameters["condor_base_outputdir"], condor_parameters["subdirectory"])
+    os.system(move_command)
+    #condor_parameters.write_yaml(outputsub)
+    print "wrote yaml files to: " + outputsub
     exit=1
     from sys import platform
     print platform

@@ -34,9 +34,11 @@ if __name__ == '__main__':
     outdir = '/'.join((condor_pars["base_outputdir"],condor_pars["subdirectory"]))
 
 
-    filename= outdir + "/start_"+job+".txt"
+    filename= outdir + "/start_" +job + ".txt"
     print "started " + filename
-    os.system("touch " + filename)
+    os.system("touch start.txt")
+    move_command = 'xrdcp start.txt {}/{}/start_{}.txt'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
+    os.system(move_command)
 
     #create the gaudi run command from the run parameters
     gaudi_command = eval(condor_pars["gaudi_command"])
@@ -49,7 +51,7 @@ if __name__ == '__main__':
     #move the output files to the output directory
 #xrdcp
     os.system("ls -al")
-    move_command = 'cp *.root {}/{}/output_{}.root'.format( condor_pars["base_outputdir"], condor_pars["subdirectory"], job)
+    move_command = 'xrdcp *.root {}/{}/output_{}.root'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
     print "move files:- ", move_command
     os.system(move_command)
     os.remove(filename)

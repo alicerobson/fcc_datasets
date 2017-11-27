@@ -15,16 +15,13 @@ if __name__ == '__main__':
     #read in the condor parameters from parameters.yaml so that we know the location of the output directory
     condor_pars= CondorParameters("parameters.yaml")
     
-    #this is the directory where the root files are stored
-    outdir = '/'.join((condor_pars["base_outputdir"],condor_pars["subdirectory"]))
-    
-    #create a touch file (will be removed at the end if everything works)
-    filename= '/'.join((outdir ,"finish.txt"))
-    os.system("touch "+ filename)
     curdir = os.getcwd()
+    os.system('export EOS_MGM_URL=root://eospublic.cern.ch')
     
-    #move to the output directory
+    #move to the base output directory
     os.chdir(condor_pars["base_outputdir"])
+    
+    os.system("touch " + condor_pars["subdirectory"]+"/finish.txt")
     
     '''base directory where outputs are stored'''
     basedir.set_basename(condor_pars["base_outputdir"])
@@ -35,12 +32,12 @@ if __name__ == '__main__':
                      cache=False)
     ds.write()
     
-    os.system("ls -al " +  outdir)
-    #put a copy of inf.yaml in the work directory for easy reference
-    os.system("cp " + condor_pars["subdirectory"] +"/info.yaml " + curdir  )
-    
+    os.system("ls -al " +  condor_pars["base_outputdir"] + "/" +condor_pars["subdirectory"])
+    #put a copy of info.yaml in the work directory for easy reference
+    os.system("xrdcp " + condor_pars["subdirectory"] +"/info.yaml " + curdir  )
+    os.system("ls -al " +  condor_pars["base_outputdir"] + "/" +condor_pars["subdirectory"])
     #remove the touch file
-    os.system("rm "+ filename)
+    os.system("rm " + condor_pars["subdirectory"]+"/finish.txt")
     
     #move back to the original directory
     os.chdir(curdir)
