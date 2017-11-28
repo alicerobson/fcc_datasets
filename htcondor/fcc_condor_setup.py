@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 from fcc_datasets.env_versions import EnvVersions
 from filename_handler import FilenameHandler
 from condor_parameters import CondorParameters, setup_condor_parser
@@ -62,11 +63,13 @@ def setup_condor_directories(subdir, base_outputdir):
     call(["mkdir", subdir+"/error"]) 
     #create a subdirectory in the base output directory
     basedir = ''.join((base_outputdir, subdir))
+    print basedir
     call(["mkdir", basedir])
-
+    print basedir
     #copy the files in $FCCDATASETS/htcondor/base/ into the working directory to be used for the condor run
     os.system("cp -R $FCCDATASETS/htcondor/base/* " + subdir)
     os.system("ls " + subdir)
+    print "made dirs"
 
 def write_condor_software_yaml(subdir, filename="software.yaml"):
     ''' works out and writes a software.yaml file containing 
@@ -133,6 +136,9 @@ if __name__ == '__main__':
         sys.exit(1)
     os.system('export EOS_MGM_URL="root://eospublic.cern.ch"')
 
+#experiment
+
+
     #extract options and create condor_parameters class to hold the run parameters
     #this will also construct a unique subdirectory name
     condor_parameters = CondorParameters(options)
@@ -147,10 +153,6 @@ if __name__ == '__main__':
     outputsub= condor_parameters["base_outputdir"] + "/" + condor_parameters["subdirectory"]    
     write_condor_software_yaml(condor_parameters["subdirectory"] )
 
-    #condor_parameters.write_yaml(outputsub)
-
-    #os.system( "ls -l " + outputsub  )
-    
     # move to the working directory and launch the dag job
     os.chdir(condor_parameters["subdirectory"])
     move_command = 'xrdcp *.yaml {}/{}/'.format(condor_parameters["condor_base_outputdir"], condor_parameters["subdirectory"])
@@ -160,12 +162,9 @@ if __name__ == '__main__':
     exit=1
     from sys import platform
     print platform
-    #condor submissions often fail, so keep trying to submit until one is accepted.
-    while platform == "linux2" and exit<>0:
-        print "submit to condor"
-        exit = os.system( "condor_submit_dag -update_submit run.dag ")
-        print exit
+    
+    #os.system('env | grep PYTHON')
 
-    #return to original directory
-    os.chdir("..")
     print "finished setup"
+    #do not remove this final print as it is required by fcc_condor_submit.sh
+    print condor_parameters["subdirectory"]

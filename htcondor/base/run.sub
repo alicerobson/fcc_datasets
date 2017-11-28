@@ -1,11 +1,14 @@
  #NB the execute script will add in the JobFlavour and queue estimated from the number of events
- executable              = run.py
+ executable              = run.sh
  output                  = output/out.$(ClusterId).$(runnumber).txt
  error                   = error/err.$(ClusterId).$(runnumber).txt
  log                     = log/log.$(ClusterId).$(runnumber).txt
- transfer_input_files    = parameters.yaml
  getenv					 = True
  arguments =  $(runnumber)
- transfer_input_files = parameters.yaml
+ transfer_input_files = parameters.yaml, run.py
  transfer_output_files = ""
+ #try to gaurd against faulty batch machines: if a job fails try again on a different machine (up to 3 times)
+ on_exit_remove = (ExitBySignal == False) || (ExitSignal != 1)
+ max_retries = 3
+ requirements = Machine =!= LastRemoteHost
  +AccountingGroup = "group_u_FCC.local_gen"

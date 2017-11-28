@@ -1,3 +1,4 @@
+#!/bin/bash
 export PATH=$PWD/scripts:$PATH
 export FCCDATASETS=$PWD
 export PATH=$FCCDATASETS:$PATH

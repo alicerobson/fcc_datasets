@@ -12,10 +12,18 @@ import optparse
     It requires that a parameters.yaml file has already been created (by start.py)
     '''
 
+def move_xrdcp(command, nfails=10):
+    for i in range(nfails):
+        print 'moving file with xrdcp, attempt ', i
+        success = os.system(command)
+        if success==0:
+            print "succeeded"
+            break
+
 if __name__ == '__main__':
     
     print "start gaudi run"
-    
+    #os.system('env')
     from optparse import OptionParser
     parser = OptionParser(
                           usage='%prog  job ',
@@ -38,7 +46,8 @@ if __name__ == '__main__':
     print "started " + filename
     os.system("touch start.txt")
     move_command = 'xrdcp start.txt {}/{}/start_{}.txt'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
-    os.system(move_command)
+    move_xrdcp(move_command)
+#os.system(move_command)
 
     #create the gaudi run command from the run parameters
     gaudi_command = eval(condor_pars["gaudi_command"])
@@ -53,8 +62,8 @@ if __name__ == '__main__':
     os.system("ls -al")
     move_command = 'xrdcp *.root {}/{}/output_{}.root'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
     print "move files:- ", move_command
-    os.system(move_command)
+    move_xrdcp(move_command)
+    #os.system(move_command)
     os.remove(filename)
-    
     print "finish gaudi run"
     
