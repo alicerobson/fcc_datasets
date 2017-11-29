@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-
 import sys
 import os
 from fcc_datasets.dataset import Dataset
 import fcc_datasets.basedir as basedir
 from fcc_datasets.htcondor.condor_parameters import CondorParameters
 from fcc_datasets.htcondor.movexrdcp import move_xrdcp
-
 import optparse
 
 ''' run.py is called once per run. It launches the fccsw script

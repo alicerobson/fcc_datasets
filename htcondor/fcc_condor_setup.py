@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import os
 import sys
 from fcc_datasets.env_versions import EnvVersions
@@ -64,7 +63,6 @@ def setup_condor_directories(subdir, base_outputdir):
     call(["mkdir", subdir+"/error"]) 
     #create a subdirectory in the base output directory
     basedir = ''.join((base_outputdir, subdir))
-    print basedir
     call(["mkdir", basedir])
     print basedir
     #copy the files in $FCCDATASETS/htcondor/base/ into the working directory to be used for the condor run
