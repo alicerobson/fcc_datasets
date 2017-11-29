@@ -152,7 +152,7 @@ if __name__ == '__main__':
     write_condor_software_yaml(condor_parameters["subdirectory"] )
 
     # copy yaml to the working directory
-    move_command = 'xrdcp {}/*.yaml {}/{}/'.format(condor_parameters["subdirectory"], condor_parameters["condor_base_outputdir"], condor_parameters["subdirectory"])
+    move_command = 'xrdcp {}/*.yaml {}/{}/'.format(condor_parameters["subdirectory"], condor_parameters["xrdcp_base_outputdir"], condor_parameters["subdirectory"])
     move_xrdcp(move_command)
     print "wrote yaml files to: " + outputsub
     print "finished setup"

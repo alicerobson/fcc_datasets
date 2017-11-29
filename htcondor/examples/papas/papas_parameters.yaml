@@ -1,9 +1,12 @@
+#expected usage: fcc_condor_submit.sh -p nameofthisfile.yaml 
+#expected usage with alternative run sizes: fcc_condor_submit.sh -p nameofthisfile.yaml  -e 100 -r 100
 default_parameters:
-  alt_base_outputdir: /afs/cern.ch/work/a/alrobson/papasdagruns/eos/
   #base directory for where the root output files will go (usually eos)
   base_outputdir: /eos/experiment/fcc/ee/datasets/papas/
+  #for xrdcp with eos we need a fuller path, if not using eos set this to base_outputdir
+  xrdcp_base_outputdir: root://eospublic.cern.ch//eos/experiment/fcc/ee/datasets/papas/
   #label used for output directories
-  name: "CMS_eeZZ"
+  name: "CMS_ee_ZZ"
   #inputs used for the gaudi run
   input: $FCCDATASETS/htcondor/examples/papas/ee_ZZ.txt
   script: $FCCDATASETS/htcondor/examples/papas/simple_papas_condor.py

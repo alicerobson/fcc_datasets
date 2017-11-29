@@ -32,7 +32,6 @@ if __name__ == '__main__':
                      cache=False)
     ds.write()
     
-    os.system("ls -al " +  condor_pars["base_outputdir"] + "/" +condor_pars["subdirectory"])
     #put a copy of info.yaml in the work directory for easy reference
     move_xrdcp("xrdcp " + condor_pars["subdirectory"] +"/info.yaml " + curdir  )
     os.system("ls -al " +  condor_pars["base_outputdir"] + "/" +condor_pars["subdirectory"])
