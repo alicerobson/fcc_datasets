@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # create a started.txt touch file so we can see what is active, this gets deleted once the run finishes
     os.system("touch started.txt")
-    move_command = 'xrdcp started.txt {}/{}/started_{}.txt'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
+    move_command = 'xrdcp started.txt {}/{}/started_{}.txt'.format( condor_pars["xrdcp_base_outputdir"], condor_pars["subdirectory"], job)
     move_xrdcp(move_command)
     filename= outdir + "/started_" +job + ".txt"
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     
     #move the output files to the named output directory
     os.system("ls -l")
-    move_xrdcp('xrdcp *.root {}/{}/output_{}.root'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job))
+    move_xrdcp('xrdcp *.root {}/{}/output_{}.root'.format( condor_pars["xrdcp_base_outputdir"], condor_pars["subdirectory"], job))
     
     #remove the started_.txt file
     os.remove(filename)
