@@ -10,5 +10,6 @@
  #try to gaurd against faulty batch machines: if a job fails try again on a different machine (up to 3 times)
  on_exit_remove = (ExitBySignal == False) || (ExitSignal != 1)
  max_retries = 3
- requirements = Machine =!= LastRemoteHost
+ requirements = Machine =!= "b6e55244d7.cern.ch" &&   Machine =!= "b616a3252f.cern.ch"
+ #requirements = Machine =!= LastRemoteHost
  +AccountingGroup = "group_u_FCC.local_gen"

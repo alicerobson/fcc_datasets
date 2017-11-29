@@ -2,8 +2,7 @@
 #expected usage with alternative run sizes: fcc_condor_submit -p nameofthisfile.yaml  -e 100 -r 100
 default_parameters:
   #base directory for where the root output files will go (usually eos)
-  xbase_outputdir: /eos/experiment/fcc/ee/datasets/papas/
-  base_outputdir: /afs/cern.ch/work/a/alrobson/delphes/delpheseos/
+  base_outputdir: /eos/experiment/fcc/ee/datasets/papas/
   #label used for output directories
   name: delphes
   #inputs used for the gaudi run, only gaudi_command (and anything it uses) is required

@@ -5,6 +5,8 @@ import os
 from fcc_datasets.dataset import Dataset
 import fcc_datasets.basedir as basedir
 from fcc_datasets.htcondor.condor_parameters import CondorParameters
+from fcc_datasets.htcondor.movexrdcp import move_xrdcp
+
 import optparse
 
 ''' run.py is called once per run. It launches the fccsw script
@@ -12,18 +14,9 @@ import optparse
     It requires that a parameters.yaml file has already been created (by start.py)
     '''
 
-def move_xrdcp(command, nfails=10):
-    for i in range(nfails):
-        print 'moving file with xrdcp, attempt ', i
-        success = os.system(command)
-        if success==0:
-            print "succeeded"
-            break
-
 if __name__ == '__main__':
     
     print "start gaudi run"
-    #os.system('env')
     from optparse import OptionParser
     parser = OptionParser(
                           usage='%prog  job ',
@@ -41,13 +34,12 @@ if __name__ == '__main__':
     condor_pars= CondorParameters("parameters.yaml")
     outdir = '/'.join((condor_pars["base_outputdir"],condor_pars["subdirectory"]))
 
-
-    filename= outdir + "/start_" +job + ".txt"
-    print "started " + filename
-    os.system("touch start.txt")
-    move_command = 'xrdcp start.txt {}/{}/start_{}.txt'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
+    # create a started.txt touch file so we can see what is active, this gets deleted once the run finishes
+    os.system("touch started.txt")
+    move_command = 'xrdcp started.txt {}/{}/started_{}.txt'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
     move_xrdcp(move_command)
-#os.system(move_command)
+    filename= outdir + "/started_" +job + ".txt"
+    print "started " + filename
 
     #create the gaudi run command from the run parameters
     gaudi_command = eval(condor_pars["gaudi_command"])
@@ -57,13 +49,13 @@ if __name__ == '__main__':
     #submit the command
     os.system(gaudi_command)
     
-    #move the output files to the output directory
-#xrdcp
-    os.system("ls -al")
+    #move the output files to the named output directory
+    os.system("ls -l")
     move_command = 'xrdcp *.root {}/{}/output_{}.root'.format( condor_pars["condor_base_outputdir"], condor_pars["subdirectory"], job)
     print "move files:- ", move_command
     move_xrdcp(move_command)
-    #os.system(move_command)
+    
+    #remove the started_.txt file
     os.remove(filename)
     print "finish gaudi run"
     

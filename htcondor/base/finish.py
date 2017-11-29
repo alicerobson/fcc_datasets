@@ -4,29 +4,20 @@ import os
 from fcc_datasets.dataset import Dataset
 import fcc_datasets.basedir as basedir
 from fcc_datasets.htcondor.condor_parameters import CondorParameters
+from fcc_datasets.htcondor.movexrdcp import move_xrdcp
 import optparse 
 
 '''Finish.py produces a summary output yaml file which will contain details of the root files in the output directory and will
 amalgamate all other yaml files'''
 
-def move_xrdcp(command, nfails=10):
-    for i in range(nfails):
-        print 'moving file with xrdcp, attempt ', i
-        success = os.system(command)
-        if success==0:
-            print "succeeded"
-            break
-
 
 if __name__ == '__main__':
-    
     
     #read in the condor parameters from parameters.yaml so that we know the location of the output directory
     condor_pars= CondorParameters("parameters.yaml")
     
+    #todo see if can do this without moving directory
     curdir = os.getcwd()
-    os.system('export EOS_MGM_URL=root://eospublic.cern.ch')
-    
     #move to the base output directory
     os.chdir(condor_pars["base_outputdir"])
     
