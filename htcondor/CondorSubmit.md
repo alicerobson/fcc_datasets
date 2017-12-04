@@ -33,7 +33,6 @@ fcc_condor_submit.sh -p input_parameters.yaml
 You will need to install
 
   * FCCSW
-  * heppy (to discuss with Colin)
   * fcc_datasets.
 
 Before using fcc_datasets remember to run
@@ -104,9 +103,9 @@ The documentation is not that great-
 
   If an info.yaml file has been written to the output directory then the job has completed. Take a look in the info.yaml it should show the run parameters and also the total number of events and the number of good output root files.
 
+  If there is a run.dag.rescue001 file it means something failed and it will say what. NB One or two runs may fail and result in this output - but if the info.yaml file has also been written this may not be a problem.
 
   If there is an issue then check the log, output and error directories in the working directory.  There is an output, an error file and a log file for each of the gaudi dag runs. There is an output/error/log file called finish.txt for the final finish.sub
 
-  If there is a run.dag.rescue001 file it means something failed and it will say what. NB One or two runs may fail and result in this output - but if the info.yaml file has also been written this may not be a problem.
-
   The "run.dag.dagman.out" file can also be useful.
+

@@ -43,7 +43,11 @@ def setup_condor_parser():
     parser.add_option(
         "-r","--runs", dest="runs",
         help="number of htcondor runs"
-    )         
+    )
+    parser.add_option(
+        "-x","--xrdcp_base", dest="xrdcp_base", default=None,
+        help="extra location info for xrdcp"
+    )
     return parser
 
 
@@ -81,7 +85,15 @@ class CondorParameters(object):
         self.pars[key] = value
         
     def __getitem__(self, index):
-        return self.pars[index]
+        val=None
+        try:
+            val = self.pars[index]
+        except:
+            pass
+        return val
+
+    def dict(self):
+        return self.pars
     
     def write_yaml(self, path, filename ="parameters.yaml"):
         '''write the condor parameters to a yaml file'''

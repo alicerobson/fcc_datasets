@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
+import numbers
 from fcc_datasets.env_versions import EnvVersions
 from filename_handler import FilenameHandler
 from condor_parameters import CondorParameters, setup_condor_parser
-from movexrdcp import move_xrdcp
+from copy_files_to_output import *
 from subprocess import call
 
 ''' fcc_condor_setup.py is used to setup all files and directories needed for a condor batch run
@@ -122,6 +123,21 @@ def setup_condor_dag_files(subdir, events, runs, rate = 100000):
     os.system("echo +JobFlavour = \\\"" + flavour +"\\\" >> " + outfile)
     os.system("echo Queue >> " + outfile)
 
+def copy_input_files(condor_parameters):
+    for key, value in condor_parameters.dict().iteritems():
+        if isinstance(value, basestring):
+            print value
+            try:
+                value =os.path.expandvars(value)
+                if os.path.isfile(value):
+                    print "is file"
+                    outdir ="/".join((condor_parameters["base_outputdir"], condor_parameters["subdirectory"],""))
+                    copy_files_to_output(value,
+                                 outdir,
+                                 condor_parameters["xrdcp_base"])
+            except:
+                continue
+
 
 if __name__ == '__main__':
     '''
@@ -133,7 +149,6 @@ if __name__ == '__main__':
     if len(args) != 0:
         parser.print_usage()
         sys.exit(1)
-    os.system('export EOS_MGM_URL="root://eospublic.cern.ch"')
 
     #extract options and create condor_parameters class to hold the run parameters
     #this will also construct a unique subdirectory name
@@ -150,8 +165,13 @@ if __name__ == '__main__':
     write_condor_software_yaml(condor_parameters["subdirectory"] )
 
     # copy yaml to the working directory
-    move_command = 'xrdcp {}/*.yaml {}/{}/'.format(condor_parameters["subdirectory"], condor_parameters["xrdcp_base_outputdir"], condor_parameters["subdirectory"])
-    move_xrdcp(move_command)
+    outdir ="/".join((condor_parameters["base_outputdir"], condor_parameters["subdirectory"],""))
+    copy_files_to_output('{}/*.yaml'.format(condor_parameters["subdirectory"]),
+                                            outdir,
+                                            condor_parameters["xrdcp_base"])
+    #make a copy of all other files used as parameters
+    copy_input_files(condor_parameters)
+                         #todo add in extra file moves here
     print "wrote yaml files to: " + outputsub
     print "finished setup"
     #do not remove this final print as it is required by fcc_condor_submit.sh (a hack)

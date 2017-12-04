@@ -1,5 +1,5 @@
 import os
-os.system('export EOS_MGM_URL=root://eospublic.cern.ch')
+
 
 def move_xrdcp(command, nfails=10):
     print "moving file with: " + command
@@ -10,4 +10,12 @@ def move_xrdcp(command, nfails=10):
         if success==0:
             print "successfully moved file with: " + command
             break
+
+def copy_files_to_output(infile, outfile, eos_base=None):
+    if eos_base:
+        #xrdcp is more direct for EOS
+        move_xrdcp('xrdcp  {} {}/{}'.format( infile, eos_base, outfile))
+    else:
+        #for local stuff move directly
+        os.system('cp  {} {}'.format( infile, outfile))
 

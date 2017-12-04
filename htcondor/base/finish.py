@@ -4,8 +4,7 @@ import os
 from fcc_datasets.dataset import Dataset
 import fcc_datasets.basedir as basedir
 from fcc_datasets.htcondor.condor_parameters import CondorParameters
-from fcc_datasets.htcondor.movexrdcp import move_xrdcp
-import optparse 
+import optparse
 
 '''Finish.py produces a summary output yaml file which will contain details of the root files in the output directory and will
 amalgamate all other yaml files'''
@@ -31,7 +30,7 @@ if __name__ == '__main__':
     ds.write()
     
     #put a copy of info.yaml in the work directory for easy reference
-    move_xrdcp("xrdcp " + condor_pars["subdirectory"] +"/info.yaml " + curdir  )
+    os.system("cp " + condor_pars["subdirectory"] + "/info.yaml " + curdir )
     os.system("ls -al " +  condor_pars["base_outputdir"] + "/" +condor_pars["subdirectory"])
     #remove the touch file
     os.system("rm " + condor_pars["subdirectory"]+"/finish.txt")

@@ -10,6 +10,7 @@ curdir=$PWD
 pythonouttext=$(fcc_condor_setup.py $@)
 #crude way to pick up the directory name that has been created (last output from python)
 directory=$(echo $pythonouttext | awk {'print $NF'})
+echo "Directory:" $directory
 #move to this directory to submit condor dag
 cd $directory
 #the condor jobs give an error if we still have FCC python environment set,
