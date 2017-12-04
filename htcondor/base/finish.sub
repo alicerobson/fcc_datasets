@@ -6,7 +6,7 @@
  getenv 				 = True
  transfer_input_files    = parameters.yaml, finish.py
  transfer_output_files = info.yaml
- on_exit_remove = (ExitBySignal == False) || (ExitSignal != 1)
+ on_exit_remove = (ExitBySignal == False) || (ExitCode != 11)
  max_retries = 3
  requirements = Machine =!= LastRemoteHost
 #+JobFlavour = "longlunch"

@@ -7,3 +7,6 @@ export PYTHONPATH=$SAVEDPYTHONPATH
 
 echo $HOSTNAME #useful for failed condor jobs.
 python finish.py  #invoke python executable
+if [ $? -ne 0 ] ; then
+exit 11
+fi
